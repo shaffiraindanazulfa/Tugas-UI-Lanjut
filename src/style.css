@@ -1,0 +1,107 @@
+/* ============================================================
+   Gatherly – Global Design System
+   Light theme only; matches the video tutorial reference.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  /* Brand colours */
+  --primary:        #6644ff;
+  --primary-hover:  #5533ee;
+  --primary-light:  rgba(102, 68, 255, 0.08);
+  --primary-mid:    rgba(102, 68, 255, 0.15);
+
+  /* Neutral / text */
+  --navy:           #1c1948;
+  --text:           #555;
+  --text-light:     #888;
+  --heading:        #1c1948;
+
+  /* Surface */
+  --bg:             #f5f5f7;
+  --surface:        #ffffff;
+  --surface-alt:    #fafafa;
+  --surface-hover:  #f7f7f7;
+
+  /* Borders & shadows */
+  --border:         #ebebeb;
+  --border-hover:   #d5d5d5;
+  --shadow-sm:      0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.10);
+
+  /* Nav */
+  --nav-bg:         #1c1948;
+  --nav-border:     rgba(255,255,255,0.08);
+
+  /* Typography */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+
+  /* Render quality */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  /* Remove Vite default constraints */
+  width: 100%;
+  max-width: 100%;
+  border: none;
+  text-align: left;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--heading);
+  margin: 0;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.8rem; font-weight: 800; }
+h2 { font-size: 1.8rem; font-weight: 700; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+
+p { margin: 0; }
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- Utility: container ---------- */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ---------- Utility: fade-in animation ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeInUp 0.4s ease both; }
