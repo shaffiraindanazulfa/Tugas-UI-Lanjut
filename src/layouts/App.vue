@@ -9,7 +9,7 @@ import Breadcrumb from '@/components/app/Breadcrumb.vue'
     <Navbar />
     <main class="main-content">
       <div class="main-inner">
-        <Breadcrumb />
+        <!-- <Breadcrumb /> -->
         <RouterView />
       </div>
     </main>
