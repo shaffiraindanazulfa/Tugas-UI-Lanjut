@@ -51,6 +51,10 @@
         <li class="nav-item">
           <router-link to="/contact" class="nav-link" active-class="active">Contact</router-link>
         </li>
+
+        <li class="nav-item">
+          <router-link to="/dashboard" class="nav-link" active-class="active">Organizer Dashboard</router-link>
+        </li>
       </ul>
 
       <!-- Right section -->

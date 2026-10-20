@@ -1,62 +1,91 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { useEvents } from '@/composables/useEvents';
+import EventCard from '@/components/event/EventCard.vue';
+import SearchBar from '@/components/event/SearchBar.vue';
+import CategoryFilter from '@/components/event/CategoryFilter.vue';
+import AppButton from '@/components/ui/AppButton.vue';
+
+const { activeEvents } = useEvents();
+
+const searchQuery = ref('');
+const selectedCategory = ref('All');
+const categories = ['All', 'Workshop', 'Meetup', 'Competition', 'Seminar', 'Conference'];
+
+const filteredEvents = computed(() => {
+  return activeEvents.value.filter(event => {
+    const matchSearch =
+      event.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      event.loc.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchCategory =
+      selectedCategory.value === 'All' || event.cat === selectedCategory.value;
+
+    return matchSearch && matchCategory;
+  });
+});
+</script>
+
 <template>
   <div class="event-list-page">
     <div class="header-section">
-      <h2 class="section-title">Upcoming Events</h2>
+      <h1 class="section-title">Upcoming Events</h1>
       <p class="section-desc">
-        Discover the latest gatherings and activities happening near you
+        Discover workshops, seminars, tech meetups, and competitions near you.
       </p>
     </div>
 
-    <div class="event-grid">
-      <div
-        class="event-card"
-        v-for="i in 6"
-        :key="i"
-      >
-        <div class="event-body">
-          <div class="event-meta">
-            <span class="event-date">Oct {{ 10 + i }}, 2026</span>
-            <span class="event-category">Community</span>
-          </div>
+    <SearchBar v-model="searchQuery" />
+    <CategoryFilter :categories="categories" v-model="selectedCategory" />
 
-          <h3>Community Gathering {{ i }}</h3>
+    <!-- 1. Grid ketika ada event yang cocok -->
+    <div v-if="filteredEvents.length > 0" class="event-grid">
+      <EventCard
+        v-for="event in filteredEvents"
+        :key="event.id"
+        :event="event"
+        @view-detail="$router.push(`/browse/events/${event.id}`)"
+      />
+    </div>
 
-          <p class="event-loc">
-            📍 Main Auditorium, City Center
-          </p>
+    <!-- 2. Empty state saat pencarian/filter tidak ditemukan -->
+    <div v-else-if="activeEvents.length > 0" class="search-empty-state">
+      <p class="search-empty-text">No events found matching your criteria.</p>
+    </div>
 
-          <p class="event-desc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Aliquam at velit vel magna interdum scelerisque.
-          </p>
-
-          <div class="card-footer">
-            <router-link
-              :to="`/browse/events/${i}`"
-              class="btn-link"
-            >
-              View Details &rarr;
-            </router-link>
-          </div>
-        </div>
-      </div>
+    <!-- 3. Empty state saat belum ada event sama sekali di sistem -->
+    <div v-else class="empty-state-card">
+      <div class="empty-illustration">🗓️</div>
+      <h3 class="empty-title">No Events Available Yet</h3>
+      <p class="empty-description">
+        There are currently no active events scheduled. Are you an organizer?
+        Publish and manage your first event today through the Dashboard!
+      </p>
+      <AppButton variant="primary" @click="$router.push('/dashboard/events')">
+        Go to Organizer Dashboard &rarr;
+      </AppButton>
     </div>
   </div>
 </template>
 
 <style scoped>
+.event-list-page {
+  animation: fadeIn 0.4s ease;
+}
+
 .header-section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
+  font-weight: 800;
   color: #1c1948;
   margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .section-desc {
-  color: #666;
+  color: #64748b;
   font-size: 1.1rem;
 }
 
@@ -66,89 +95,61 @@
   gap: 2rem;
 }
 
-.event-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-  border: 1px solid #f0f0f0;
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease;
-  display: flex;
-  flex-direction: column;
+/* Empty state untuk pencarian */
+.search-empty-state {
+  text-align: center;
+  padding: 4.5rem 1rem;
 }
 
-.event-card:hover {
-  transform: translateY(-5px);
-  border-color: #ddd;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-
-.event-body {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.event-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.event-date {
-  background: rgba(102, 68, 255, 0.1);
-  color: #6644ff;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.event-category {
-  color: #888;
-  font-size: 0.85rem;
+.search-empty-text {
+  color: #64748b;
+  font-size: 1.05rem;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin: 0;
 }
 
-.event-body h3 {
-  color: #1c1948;
-  margin-bottom: 0.8rem;
-  font-size: 1.4rem;
+/* Empty state ketika sistem belum ada event sama sekali */
+.empty-state-card {
+  text-align: center;
+  padding: 4.5rem 2rem;
+  background: white;
+  border-radius: 20px;
+  border: 1px dashed #cbd5e1;
+  max-width: 680px;
+  margin: 1.5rem auto 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
-.event-loc {
-  color: #666;
-  font-size: 0.95rem;
+.empty-illustration {
+  font-size: 3.5rem;
   margin-bottom: 1.5rem;
+  line-height: 1;
 }
 
-.event-desc {
-  color: #555;
-  line-height: 1.6;
-  font-size: 0.95rem;
-  margin-bottom: 2rem;
-  flex-grow: 1;
-}
-
-.card-footer {
-  border-top: 1px solid #f0f0f0;
-  padding-top: 1.5rem;
-}
-
-.btn-link {
-  display: inline-block;
+.empty-title {
+  font-size: 1.65rem;
+  font-weight: 800;
   color: #1c1948;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.2s;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
 }
 
-.btn-link:hover {
-  color: #6644ff;
+.empty-description {
+  color: #64748b;
+  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  line-height: 1.65;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
