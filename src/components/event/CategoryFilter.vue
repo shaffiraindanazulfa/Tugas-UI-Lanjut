@@ -28,27 +28,40 @@ defineEmits(['update:modelValue']);
 <style scoped>
 .category-filter {
   display: flex;
-  gap: var(--space-2);
+  flex-direction: row;
   flex-wrap: wrap;
-  margin-bottom: var(--space-6);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
 }
+
 .filter-btn {
-  background: var(--bg-light);
-  border: 1px solid var(--border-color);
-  padding: var(--space-2) var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.1rem;
   border-radius: 50px;
-  cursor: pointer;
+  border: 1.5px solid #e0e0e0;
+  background: #ffffff;
+  color: #666;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-muted);
-  transition: all 0.2s;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  line-height: 1;
 }
+
 .filter-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: #6644ff;
+  color: #6644ff;
+  background: rgba(102, 68, 255, 0.05);
 }
+
 .filter-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
+  background: #6644ff;
+  color: #ffffff;
+  border-color: #6644ff;
+  box-shadow: 0 4px 12px rgba(102, 68, 255, 0.25);
 }
 </style>

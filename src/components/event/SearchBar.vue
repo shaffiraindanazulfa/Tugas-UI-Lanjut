@@ -23,19 +23,22 @@ defineEmits(['update:modelValue']);
 <style scoped>
 .search-bar {
   width: 100%;
-  max-width: 500px;
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
 }
 .search-input {
   width: 100%;
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
   font-size: 1rem;
+  font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
+  background: #ffffff;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .search-input:focus {
-  border-color: var(--primary);
+  border-color: #6644ff;
+  box-shadow: 0 0 0 3px rgba(102, 68, 255, 0.12);
 }
 </style>
