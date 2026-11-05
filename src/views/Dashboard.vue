@@ -1,9 +1,16 @@
 <script setup>
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useEvents } from '@/composables/useEvents';
 
 const router = useRouter();
-const { events, totalEvents, activeEvents, completedEvents } = useEvents();
+const { events, totalEvents, activeEvents, completedEvents, fetchEvents } = useEvents();
+
+onMounted(() => {
+  if (events.value.length === 0) {
+    fetchEvents();
+  }
+});
 </script>
 
 <template>

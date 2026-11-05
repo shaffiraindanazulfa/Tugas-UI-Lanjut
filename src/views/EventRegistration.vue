@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useEvents } from '@/composables/useEvents';
 import AppModal from '@/components/ui/AppModal.vue';
@@ -9,12 +9,18 @@ import RegistrationReceipt from '@/components/event/RegistrationReceipt.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { getEventById, isUserRegistered } = useEvents();
+const { getEventById, isUserRegistered, fetchEventById } = useEvents();
 
 const event = computed(() => getEventById(route.params.id));
 
 const isRegistered = computed(() => {
   return event.value ? isUserRegistered(event.value.id) : false;
+});
+
+onMounted(async () => {
+  if (!event.value) {
+    await fetchEventById(route.params.id);
+  }
 });
 
 const isSuccessModalOpen = ref(false);
